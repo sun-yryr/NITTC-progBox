@@ -20,9 +20,8 @@ void quick (int d[],int low,int max){
         d[low] = d[max];
         d[max] = tmp;
     }
-    int tmp = d[low2];
     d[low2] = d[max];
-    d[max] = tmp;
+    d[max] = pivot;
     //printf("%d,%d\n",low2,max-1);
     quick(d,low2,max-1);
     //printf("%d,%d\n",low,max2);
