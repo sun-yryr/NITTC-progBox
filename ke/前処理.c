@@ -28,12 +28,12 @@ int main() {
     int i;
     
     FILE *fp;
-    fp = fopen("/Users/sun-mba/develop/kadai/ke1/28.img", "rb");
+    fp = fopen("/Users/sun-mba/develop/school/ke/expdat/c01.img", "rb");
     if(fp == NULL){
         printf("失敗\n");
         return 0;
     }
-    for (i=0; i<2; i++) {
+    for (i=0; i<11; i++) {
         fread(data, 512, 1, fp);
     }
     expand(data, pt);
