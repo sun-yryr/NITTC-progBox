@@ -130,7 +130,26 @@ public class SourceExample{
 		}
 		fin.close(); 
 		return true;
-	}
+    }
+    
+    public void saveData(String saveFileName) throws Exception {
+        File save = new File(saveFileName);
+        PrintWriter write = new PrintWriter(new BufferedWriter(new FileWriter(save)));
+        write.println(this.a);
+        write.printf("%d %d\n", this.b.length, this.b[0].length);
+        for (int h=0; h<this.b.length; h++) {
+            for (int i=0; i<this.b[0].length; i++) {
+                write.print(this.b[h][i]);
+                if (i+1 != this.b[0].length) {
+                    write.print(" ");
+                } else {
+                    write.println();
+                }
+            }
+        }
+        write.print(this.str);
+        write.close();
+    }
 
 
     public static void main(String[] args) throws Exception {
@@ -155,6 +174,7 @@ public class SourceExample{
     ex.showAllContentsOfB();
     System.out.println("");
     System.out.println(ex.getStr());
+    ex.saveData("savedSample.dat");
 
     }
 
