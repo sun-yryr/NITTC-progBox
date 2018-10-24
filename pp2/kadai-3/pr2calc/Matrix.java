@@ -41,11 +41,11 @@ public class Matrix {
 
 	public int getNumOfRow(){
 		return this.numOfRow;
-        }
+    }
         
 	public int getNumOfColumn(){
 		return this.numOfColumn;
-        }
+    }
 
 	public double showsComponentOf(int rowIndex, int columnIndex){
 		// 指定した範囲が存在しない場合
@@ -60,12 +60,13 @@ public class Matrix {
 	public void display(){
         // 行列内容の表示処理を実装せよ
         for (int h=0; h<numOfRow; h++) {
+            System.out.print("[");
             for (int i=0; i<numOfColumn; i++) {
-                System.out.printf("%f", this.m[h][i]);
+                System.out.printf("%.2f", this.m[h][i]);
                 if (i+1 != numOfColumn) {
                     System.out.print(" , ");
                 } else {
-                    System.out.print("\n");
+                    System.out.print("]\n");
                 }
             }
         }
@@ -146,7 +147,10 @@ public class Matrix {
 
     public boolean multipliable(Matrix y) {
         if (this.numOfColumn == y.numOfRow) return true;
-        else return false;
+        else {
+            System.out.println("要素数が計算できる組み合わせとなっていません。");
+            return false;
+        }
     }
 
 
@@ -214,28 +218,43 @@ public class Matrix {
             mat8 = new Matrix(k5_2);
 // 以下は、行列・ベクトル演算の実行＆結果表示の一例．不要であれば削除し，課題の条件を満たす記述を新たに追加すること
 
-        System.out.printf("(1) %f\n", mat0.getInnerProduct(y1));
+        System.out.printf("(1) %.3f\n\n", mat0.getInnerProduct(y1));
 
 		System.out.println("(2)");
 		System.out.println("k2_1 = ");	mat1.display();
         System.out.println("k2_2 = ");	mat2.display();
-        System.out.println("k2_1 * k2_2 = ");
-        if(mat1.multipliable(mat2) == true)
-			(mat1.multiplyMatrix(mat2)).display();
+        System.out.println("k2_1 * k2_2 =");
+        if(mat1.multipliable(mat2) == true) {
+            (mat1.multiplyMatrix(mat2)).display();    
+        }
+        System.out.println();
 
         System.out.println("(3)");
-        System.out.println("k3_1 = ");	mat3.display();
+		System.out.println("k3_1 = ");	mat3.display();
         System.out.println("k3_2 = ");	mat4.display();
-        System.out.println("k3_1 * k3_2 = ");
-        if(mat3.multipliable(mat4) == true)
+        System.out.println("k3_1 * k3_2 =");
+        if(mat3.multipliable(mat4) == true) {
             (mat3.multiplyMatrix(mat4)).display();
+        }
+        System.out.println();
 
         System.out.println("(4)");
-        System.out.println("k4_1 = ");	mat5.display();
+		System.out.println("k4_1 = ");	mat5.display();
         System.out.println("k4_2 = ");	mat6.display();
-        System.out.println("k4_1 * k4_2 = ");
-        if(mat5.multipliable(mat6) == true)
-            (mat5.multiplyMatrix(mat6)).display();
+        System.out.println("k4_1 * k4_2 =");
+        if(mat5.multipliable(mat6) == true) {
+            (mat5.multiplyMatrix(mat6)).display(); 
+        }
+        System.out.println();
+
+        System.out.println("(5)");
+		System.out.println("k5_1 = ");	mat7.display();
+        System.out.println("k5_2 = ");	mat8.display();
+        System.out.println("k5_1 * k5_2 =");
+        if(mat7.multipliable(mat8) == true) {
+            (mat7.multiplyMatrix(mat8)).display();
+        }
+        System.out.println();
     }
 
 }
