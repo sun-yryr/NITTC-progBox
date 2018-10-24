@@ -59,7 +59,13 @@ public class SourceExample{
     public void showAllContentsOfB(){
         // 各自で必要な内容を記述すること
         for(int h=0;h<this.b.length;h++){
-            System.out.printf("%d , %d , %d\n",this.b[h][0], this.b[h][1], this.b[h][2]);
+            for (int i=0; i<this.b[0].length; i++) {
+                System.out.printf("%d", this.b[h][i]);
+                if (i+1 != this.b[0].length) {
+                    System.out.print(" , ");
+                }
+            }
+            System.out.printf("\n");
         }
         System.out.println();
     }
