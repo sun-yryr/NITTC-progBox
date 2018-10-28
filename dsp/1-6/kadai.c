@@ -45,10 +45,10 @@ int main() {
     do {
         printf("1: wave -> text\n2: text -> wave\n");
         scanf("%d", &mode);
-        printf("ファイル名を入力: ");
-        scanf("%s", filename);
 
         if (mode == 1) {
+            printf("ファイル名.wavを入力: ");
+            scanf("%s", filename);
             if ((fp = fopen(filename, "rb")) == NULL) {
                 printf("read_file open error.\n");
                 exit(EXIT_FAILURE);
@@ -58,6 +58,8 @@ int main() {
                 exit(EXIT_FAILURE);
             }
         } else if (mode == 2) {
+            printf("ファイル名.txtを入力: ");
+            scanf("%s", filename);
             if ((fp = fopen(filename, "r")) == NULL) {
                 printf("read_file open error.\n");
                 exit(EXIT_FAILURE);
@@ -147,13 +149,22 @@ int main() {
         fmt2.bit = 16;
         fwrite(&fmt2.bit, sizeof(short), 1, fp2);
         change(save_str, "data");
+        fwrite(save_str, sizeof(char), 4, fp2);
         int datasize = samples * 2;
         fwrite(&datasize, sizeof(int), 1, fp2);
         fseek(fp, 0, SEEK_SET);
         for (i=0; i<datasize; i++) {
-            fscanf(fp, "%d\n", &data);
-            fwrite(&data, sizeof(short), 1, fp2);
+            fscanf(fp, "%hd\n", &data.data);
+            fwrite(&data.data, sizeof(short), 1, fp2);
         }
+        double time = samples / (double)fmt2.fs;
+        printf("--- 結果 ---\n");
+        printf("ファイルサイズ　　　　 = %6d[byte]\n", filesize);
+        printf("チャネル数　　　　　　 = %6d\n", fmt2.channel);
+        printf("サンプリング周波数　　 = %6d[Hz]\n", fmt2.fs);
+        printf("量子化ビット　　　　　 = %6d\n", fmt2.bit);
+        printf("保存されているデータ数 = %6d\n", samples);
+        printf("録音時間　　　　　　　 = %.4lf\n", time);
     }
     return 0;
 }
