@@ -1,3 +1,4 @@
+/* H30 DSP1-6 4J38 */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -41,6 +42,7 @@ int main() {
     FILE *fp2;
     int i, mode = 0, samples = 0;
     char filename[64], buf[BUF_SIZE];
+    printf("H30 DSP1-6 4J38\n");
 
     do {
         printf("1: wave -> text\n2: text -> wave\n");
@@ -91,20 +93,6 @@ int main() {
         int samples = data.size/2;
         double time = samples / (double)fmt.fs;
 
-        /*
-        printf("%s\n", riff.id);
-        printf("filesize= %d\n", riff.size);
-        printf("%s\n", riff.form);
-        printf("channel= %d\n", fmt.channel);
-        printf("fs= %d\n", fmt.fs);
-        printf("data_sec= %d\n", fmt.data_sec);
-        printf("block= %d\n", fmt.block_size);
-        printf("bit= %d\n", fmt.bit);
-        printf("%s\n", data.id);
-        printf("data_size= %d\n", data.size);
-        printf("samples= %d\n", samples);
-        printf("time= %fs\n", time);
-        */
         /* -- headの読み込み終了 -- */
         printf("--- 結果 ---\n");
         printf("ファイルサイズ　　　　 = %6d[byte]\n", riff.size);
@@ -140,9 +128,9 @@ int main() {
         fwrite(&fmt2.format_id, sizeof(short), 1, fp2);
         fmt2.channel = 1;
         fwrite(&fmt2.channel, sizeof(short), 1, fp2);
-        fmt2.fs = 11025;
+        fmt2.fs = 11025; //サンプリング周波数
         fwrite(&fmt2.fs, sizeof(int), 1, fp2);
-        fmt2.data_sec = 22050;
+        fmt2.data_sec = 22050; //データ速度
         fwrite(&fmt2.data_sec, sizeof(int), 1, fp2);
         fmt2.block_size = 2;
         fwrite(&fmt2.block_size, sizeof(short), 1, fp2);
