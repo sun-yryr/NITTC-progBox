@@ -1,4 +1,5 @@
 /* H30 DSP1-6 4J38 */
+/* う 4617 - 5330 */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -25,7 +26,7 @@ typedef struct {
 typedef struct {
     char id[4];
     unsigned int size;
-    unsigned short data;
+    short data;
 } data_chunk;
 
 void change(char a[4], char b[4]) {
@@ -55,7 +56,7 @@ int main() {
                 printf("read_file open error.\n");
                 exit(EXIT_FAILURE);
             }
-            if ((fp2 = fopen("output.txt", "w")) == NULL) {
+            if ((fp2 = fopen("./data/output.txt", "w")) == NULL) {
                 printf("write_file open error.\n");
                 exit(EXIT_FAILURE);
             }
@@ -66,7 +67,7 @@ int main() {
                 printf("read_file open error.\n");
                 exit(EXIT_FAILURE);
             }
-            if ((fp2 = fopen("output.wav", "wb")) == NULL) {
+            if ((fp2 = fopen("./data/output.wav", "wb")) == NULL) {
                 printf("write_file open error.\n");
                 exit(EXIT_FAILURE);
             }
@@ -90,7 +91,7 @@ int main() {
         fmt.byte_sec = fmt.fs * fmt.byte_samp;
         fread(data.id, sizeof(char), 4, fp);
         fread(&data.size, sizeof(int), 1, fp);
-        int samples = data.size/2;
+        samples = data.size/2;
         double time = samples / (double)fmt.fs;
 
         /* -- headの読み込み終了 -- */
@@ -128,7 +129,7 @@ int main() {
         fwrite(&fmt2.format_id, sizeof(short), 1, fp2);
         fmt2.channel = 1;
         fwrite(&fmt2.channel, sizeof(short), 1, fp2);
-        fmt2.fs = 11025; //サンプリング周波数
+        fmt2.fs = 11025*2; //サンプリング周波数
         fwrite(&fmt2.fs, sizeof(int), 1, fp2);
         fmt2.data_sec = 22050; //データ速度
         fwrite(&fmt2.data_sec, sizeof(int), 1, fp2);
