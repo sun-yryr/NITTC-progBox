@@ -1,5 +1,7 @@
 /* H30 DSP1-6 4J38 */
 /* う 4617 - 5330 */
+/* お 13493 - 13613 */
+/* あ 2783 - 3157 */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -129,7 +131,7 @@ int main() {
         fwrite(&fmt2.format_id, sizeof(short), 1, fp2);
         fmt2.channel = 1;
         fwrite(&fmt2.channel, sizeof(short), 1, fp2);
-        fmt2.fs = 11025*2; //サンプリング周波数
+        fmt2.fs = 11025; //サンプリング周波数
         fwrite(&fmt2.fs, sizeof(int), 1, fp2);
         fmt2.data_sec = 22050; //データ速度
         fwrite(&fmt2.data_sec, sizeof(int), 1, fp2);

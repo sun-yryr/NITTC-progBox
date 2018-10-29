@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define Hz 11025
+#define Hz 714
 
 typedef struct dee{
     double re;
