@@ -155,8 +155,8 @@ public class Matrix {
 
     public Matrix transpose() {
         double[][] returndata = new double[this.numOfColumn][this.numOfRow];
-        for (int h=0; h<this.numOfRow; h++) {
-            for (int i=0; i<this.numOfColumn; i++) {
+        for (int h=0; h<this.numOfColumn; h++) {
+            for (int i=0; i<this.numOfRow; i++) {
                 returndata[h][i] = this.m[i][h];
             }
         }
@@ -178,8 +178,8 @@ public class Matrix {
             System.exit(0);
         }
         double[][] sc = {
-            {Math.sin(radious), -1.0*(Math.cos(radious))},
-            {Math.cos(radious), Math.sin(radious)}
+            {Math.cos(radious), -1.0*(Math.sin(radious))},
+            {Math.sin(radious), Math.cos(radious)}
         };
         Matrix routa = new Matrix(sc);
         return routa.multiplyMatrix(newdata);
@@ -207,21 +207,25 @@ public class Matrix {
             x2 = { 2, -3.464};
 
 		double[][] 
-            k5_2 = {
-                {-5, -3,  1},
-                {-3,  3,  2}
+            k = {
+                {-5, -3},
+                {6,  12121},
+                {2, -8}
             };
                 
                 
         Matrix mat0 = new Matrix(x1),
-                mat1 = new Matrix(x2);
+                mat1 = new Matrix(x2),
+                mat2 = new Matrix(k);
 // 以下は、行列・ベクトル演算の実行＆結果表示の一例．不要であれば削除し，課題の条件を満たす記述を新たに追加すること
 
-        System.out.printf("(1) %.3f\n\n", 1.234);
+        System.out.println("(1)");
+        mat2.display(); mat2.transpose().display();
+        System.out.println();
 
 		System.out.println("(2)");
 		System.out.println("rotate(45) = ");	mat0.rotate(45).display();
-        System.out.println("rotate(60) = ");	mat1.rotate(360).display();
+        System.out.println("rotate(60) = ");	mat1.rotate(60).display();
         System.out.println();
     }
 
