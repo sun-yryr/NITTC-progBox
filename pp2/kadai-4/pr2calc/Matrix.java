@@ -154,7 +154,7 @@ public class Matrix {
     }
 
     public Matrix transpose() {
-        double[][] returndata = new double[this.numOfRow][this.numOfColumn];
+        double[][] returndata = new double[this.numOfColumn][this.numOfRow];
         for (int h=0; h<this.numOfRow; h++) {
             for (int i=0; i<this.numOfColumn; i++) {
                 returndata[h][i] = this.m[i][h];
@@ -164,12 +164,33 @@ public class Matrix {
     }
 
     public Matrix rotate(int theta) {
+        double radious = convertIntoRadian(theta);
+        Matrix newdata = new Matrix();
+        if (this.numOfRow == 1 && this.numOfColumn == 2) {
+            //行ベクトル
+            double[][] tmp = {{this.m[0][0]}, {this.m[0][1]}};
+            newdata = new Matrix(tmp);
+        } else if (this.numOfColumn == 1 && this.numOfRow == 2) {
+            //列ベクトル
+            newdata = new Matrix(this.m);
+        } else {
+            System.out.println("このベクトルは回転できません。");
+            System.exit(0);
+        }
+        double[][] sc = {
+            {Math.sin(radious), -1.0*(Math.cos(radious))},
+            {Math.cos(radious), Math.sin(radious)}
+        };
+        Matrix routa = new Matrix(sc);
+        return routa.multiplyMatrix(newdata);
+    }
+
+    public static double convertIntoRadian(double theta) {
         if (theta < -360 || 360 < theta) {
             System.out.println("引数が不正です。");
             System.exit(0);
-        } else if (this.numOfColumn != 1) {
-            System.out.println("このオブジェクトは列別");
         }
+        return (theta/180.0) * Math.PI;
     }
 
 
@@ -182,44 +203,10 @@ public class Matrix {
 // 行列・ベクトル定義、および演算処理の一例 （あくまで一例です）　課題の要求を満たすよう、各自で加筆・修正してください
 
 		double[]
-            x1 = { 2, -3,  7},
-            y1 = {-1, -2,  2},
+            x1 = {-3, 3},
+            x2 = { 2, -3.464};
 
-            k3_2 = {3, 7, -5, 2};
 		double[][] 
-			k2_1 = {
-                { 1,  2,  3},
-                { 3,  2, -1},
-                { 4,  2,  6}
-            },
-
-			k2_2 = {
-                { 5,  3,  1},
-                { 3, -3,  2}
-            },
-
-			k3_1 = {
-				{ 3},
-                {-2}
-            },
-
-            k4_1 = {
-                { 1,  2,  3},
-                { 3,  2, -1},
-                { 4,  2,  6}
-            },
-
-            k4_2 = {
-                { 8,  2},
-                {-3,  2},
-                { 1,  6}
-            },
-
-            k5_1 = {
-                { 2, -3},
-                { 4,  2}
-            },
-
             k5_2 = {
                 {-5, -3,  1},
                 {-3,  3,  2}
@@ -227,52 +214,14 @@ public class Matrix {
                 
                 
         Matrix mat0 = new Matrix(x1),
-            mat1 = new Matrix(k2_1),
-            mat2 = new Matrix(k2_2),
-            mat3 = new Matrix(k3_1),
-            mat4 = new Matrix(k3_2),
-            mat5 = new Matrix(k4_1),
-            mat6 = new Matrix(k4_2),
-            mat7 = new Matrix(k5_1),
-            mat8 = new Matrix(k5_2);
+                mat1 = new Matrix(x2);
 // 以下は、行列・ベクトル演算の実行＆結果表示の一例．不要であれば削除し，課題の条件を満たす記述を新たに追加すること
 
-        System.out.printf("(1) %.3f\n\n", mat0.getInnerProduct(y1));
+        System.out.printf("(1) %.3f\n\n", 1.234);
 
 		System.out.println("(2)");
-		System.out.println("k2_1 = ");	mat1.display();
-        System.out.println("k2_2 = ");	mat2.display();
-        System.out.println("k2_1 * k2_2 =");
-        if(mat1.multipliable(mat2) == true) {
-            (mat1.multiplyMatrix(mat2)).display();    
-        }
-        System.out.println();
-
-        System.out.println("(3)");
-		System.out.println("k3_1 = ");	mat3.display();
-        System.out.println("k3_2 = ");	mat4.display();
-        System.out.println("k3_1 * k3_2 =");
-        if(mat3.multipliable(mat4) == true) {
-            (mat3.multiplyMatrix(mat4)).display();
-        }
-        System.out.println();
-
-        System.out.println("(4)");
-		System.out.println("k4_1 = ");	mat5.display();
-        System.out.println("k4_2 = ");	mat6.display();
-        System.out.println("k4_1 * k4_2 =");
-        if(mat5.multipliable(mat6) == true) {
-            (mat5.multiplyMatrix(mat6)).display(); 
-        }
-        System.out.println();
-
-        System.out.println("(5)");
-		System.out.println("k5_1 = ");	mat7.display();
-        System.out.println("k5_2 = ");	mat8.display();
-        System.out.println("k5_1 * k5_2 =");
-        if(mat7.multipliable(mat8) == true) {
-            (mat7.multiplyMatrix(mat8)).display();
-        }
+		System.out.println("rotate(45) = ");	mat0.rotate(45).display();
+        System.out.println("rotate(60) = ");	mat1.rotate(360).display();
         System.out.println();
     }
 

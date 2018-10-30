@@ -87,11 +87,10 @@ int main() {
     fmt.byte_sec = fmt.fs * fmt.byte_samp;
     fseek(fp, fmt.size, SEEK_CUR);
     // fact
-    /*
     fread(fact.id, sizeof(char), 4, fp);
     fread(&fact.size, sizeof(int), 1, fp);
     fseek(fp, fact.size, SEEK_CUR);
-    */
+    // data
     fread(data.id, sizeof(char), 4, fp);
     fread(&data.size, sizeof(int), 1, fp);
     samples = data.size/2;
