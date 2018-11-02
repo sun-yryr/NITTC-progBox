@@ -75,7 +75,7 @@ Complex division(Complex A, Complex B) {
 
 void twid(Complex *A, int N) {
     for(int i=0; i<N; i++) {
-        double theta = ((2 * M_PI) / N) * i;
+        double theta = (2 * M_PI) - ((2 * M_PI) / N) * i;
         A[i].re = cos(theta);
         A[i].im = sin(theta);
     }
