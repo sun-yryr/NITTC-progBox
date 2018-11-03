@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 
 typedef struct {
     double re;
@@ -22,17 +23,16 @@ double absolute(Complex);
 double absolute2(Complex);
 Polar polarTrans(Complex);
 Complex complexTrans(Polar);
+void fft(Complex*, Complex*, int);
+void bitReversal(int*, int);
 
 int main() {
     printf("Hello World!\n");
-    Complex test;
-    test.im = 3.5;
-    test.re = 2;
-    printf("Complex: %lf : %lf\n", test.re, test.im);
-    Polar test2 = polarTrans(test);
-    printf("Polar: %lf : %lf\n", test2.value, test2.theta);
-    test = complexTrans(test2);
-    printf("Complex: %lf : %lf\n", test.re, test.im);
+    int bit[8] = {0};
+    bitReversal(bit, (sizeof(bit)/sizeof(bit[0])));
+    for(int i=0; i<8; i++) {
+        printf("%d\n", bit[i]);
+    }
     return 0;
 }
 
@@ -110,4 +110,19 @@ Complex complexTrans(Polar A) {
     returnData.re = A.value * cos(A.theta);
     returnData.im = A.value * sin(A.theta);
     return returnData;
+}
+
+void fft(Complex *old, Complex *twin, int N) {
+    
+}
+
+void bitReversal(int *bit, int N) {
+    int i, j;
+    int m = (int)log2(N);
+    for(i=0; i<N; i++) {
+        bit[i] = 0;
+        for(j=0; j<m; j++) {
+            bit[i] += ((i >> j)& 1) << (m - j - 1);
+        }
+    }
 }
