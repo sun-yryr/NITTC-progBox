@@ -106,6 +106,7 @@ int main(int argc, char const *argv[])
     printf("結果\n");
     FILE *fp;
     FILE *fp2;
+    FILE *fp3;
     if ((fp = fopen("位相.txt", "w")) == NULL) {
         printf("read_file open error.\n");
         exit(EXIT_FAILURE);
@@ -114,10 +115,15 @@ int main(int argc, char const *argv[])
         printf("write_file open error.\n");
         exit(EXIT_FAILURE);
     }
+    if ((fp3 = fopen("all.txt", "w")) == NULL) {
+        printf("write_file open error.\n");
+        exit(EXIT_FAILURE);
+    }
     for(int i=0; i<Hz; i++){
-        printf("Xn[%d]:%lf+%lfj",i ,Xn[i].re, Xn[i].im);
+        printf("Xn[%d]:%lf+%lfj\n",i ,Xn[i].re, Xn[i].im);
         fprintf(fp2, "%lf\n", shinpuku(Xn[i]));
         fprintf(fp, "%lf\n", isou(Xn[i]));
+        fprintf(fp3, "%lf %lf\n", Xn[i].re, Xn[i].im);
     }
 
     return 0;

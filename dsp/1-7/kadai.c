@@ -23,16 +23,29 @@ double absolute(Complex);
 double absolute2(Complex);
 Polar polarTrans(Complex);
 Complex complexTrans(Polar);
-void fft(Complex*, Complex*, int);
+void fft(Complex*, int);
 void bitReversal(int*, int);
 
 int main() {
+    char filename[256];
+    FILE *fp;
+    int size, i=0;
     printf("Hello World!\n");
-    int bit[8] = {0};
-    bitReversal(bit, (sizeof(bit)/sizeof(bit[0])));
-    for(int i=0; i<8; i++) {
-        printf("%d\n", bit[i]);
+    printf("filename >> ");
+    scanf("%s", filename);
+    if ((fp = fopen(filename, "r")) == NULL) {
+        printf("read_file open error.\n");
+        exit(EXIT_FAILURE);
     }
+    printf("何点FFT: ");
+    scanf("%d", &size);
+    Complex *data;
+    data = (Complex*)malloc(size * sizeof(Complex));
+    while(fscanf(fp, "%lf %lf\n", data[i].re, data[i].im)) {
+        i++;
+    };
+    fft(data, size);
+    
     return 0;
 }
 
@@ -112,17 +125,44 @@ Complex complexTrans(Polar A) {
     return returnData;
 }
 
-void fft(Complex *old, Complex *twin, int N) {
-    
+void fft(Complex *old, int N) {
+    int i, j;
+    int *check, *bit;
+    Complex *twin;
+    *check = (int*)malloc(N * sizeof(int));
+    *bit = (int*)malloc(N * sizeof(int));
+    bitReversal(bit, N);
+    twid(twin, N);
+    for(i=0; i<N; i++) {
+        old[bit[i]] = old[i];
+        check[i] = 0;
+    }
+    int p = N / 2;
+    //段数繰り返し
+    for(i=0; i<(int)log2(N); i++, p/=2) {
+        int nk = 0;
+        int next = i + (int)pow(2, i);
+        for(j=0; j<N; j++) {
+            if(check[i] == 0) {
+                check[i] = 1; check[next] = 1;
+                Complex tmp = multiplication(old[next], twin[nk]);
+                Complex ad = addition(old[i], tmp);
+                old[next] = subtraction(old[i], tmp);
+                old[i] = ad;
+                if((i!=0) && ((nk+p) < (N/2))) nk += p;
+                else nk = 0;
+            }
+        }
+    }
 }
 
 void bitReversal(int *bit, int N) {
     int i, j;
-    int m = (int)log2(N);
+    int r = (int)log2(N);
     for(i=0; i<N; i++) {
         bit[i] = 0;
-        for(j=0; j<m; j++) {
-            bit[i] += ((i >> j)& 1) << (m - j - 1);
+        for(j=0; j<r; j++) {
+            bit[i] += ((i >> j)& 1) << (r - j - 1);
         }
     }
 }
