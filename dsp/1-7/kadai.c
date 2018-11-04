@@ -41,10 +41,15 @@ int main() {
     scanf("%d", &size);
     Complex *data;
     data = (Complex*)malloc(size * sizeof(Complex));
-    while(fscanf(fp, "%lf %lf\n", data[i].re, data[i].im)) {
-        i++;
-    };
+    for(i=0; i<size; i++) {
+        data[i].re = 0;
+        data[i].im = 0;
+        fscanf(fp, "%lf %lf\n", &data[i].re, &data[i].im);
+    }
     fft(data, size);
+    for(i=0; i<size; i++) {
+        printf("[%d]: %f + %lf j\n", i, data[i].re, data[i].im);
+    }
     
     return 0;
 }
@@ -129,8 +134,8 @@ void fft(Complex *old, int N) {
     int i, j;
     int *check, *bit;
     Complex *twin;
-    *check = (int*)malloc(N * sizeof(int));
-    *bit = (int*)malloc(N * sizeof(int));
+    check = (int*)malloc(N * sizeof(int));
+    bit = (int*)malloc(N * sizeof(int));
     bitReversal(bit, N);
     twid(twin, N);
     for(i=0; i<N; i++) {
@@ -153,6 +158,7 @@ void fft(Complex *old, int N) {
                 else nk = 0;
             }
         }
+        for(int as=0; as<N; as++) check[as] = 0;
     }
 }
 
