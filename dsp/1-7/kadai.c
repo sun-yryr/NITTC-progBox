@@ -2,6 +2,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define LOG printf("line = %d\n", __LINE__);
+
 typedef struct {
     double re;
     double im;
@@ -45,6 +47,9 @@ int main() {
         data[i].re = 0;
         data[i].im = 0;
         fscanf(fp, "%lf %lf\n", &data[i].re, &data[i].im);
+    }
+    for(i=0; i<size; i++) {
+        printf("[%d]: %f + %lf j\n", i, data[i].re, data[i].im);
     }
     fft(data, size);
     for(i=0; i<size; i++) {
@@ -136,6 +141,7 @@ void fft(Complex *old, int N) {
     Complex *twin;
     check = (int*)malloc(N * sizeof(int));
     bit = (int*)malloc(N * sizeof(int));
+    twin = (Complex*)malloc(N * sizeof(Complex));
     bitReversal(bit, N);
     twid(twin, N);
     for(i=0; i<N; i++) {
