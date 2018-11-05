@@ -19,14 +19,14 @@ Complex addition(Complex, Complex);
 Complex subtraction(Complex, Complex);
 Complex multiplication(Complex, Complex);
 Complex division(Complex, Complex);
-void twid(Complex*, int);
+void twid(Complex[], int);
 Complex conjugate(Complex);
 double absolute(Complex);
 double absolute2(Complex);
 Polar polarTrans(Complex);
 Complex complexTrans(Polar);
-void fft(Complex*, int);
-void bitReversal(int*, int);
+void fft(Complex[], int);
+void bitReversal(int[], int);
 
 int main() {
     char filename[256];
@@ -96,7 +96,7 @@ Complex division(Complex A, Complex B) {
     return returnData;
 }
 
-void twid(Complex *A, int N) {
+void twid(Complex A[], int N) {
     for(int i=0; i<N; i++) {
         double theta = (2 * M_PI) - ((2 * M_PI) / N) * i;
         A[i].re = cos(theta);
@@ -135,7 +135,7 @@ Complex complexTrans(Polar A) {
     return returnData;
 }
 
-void fft(Complex *old, int N) {
+void fft(Complex old[], int N) {
     int i, j;
     int *check, *bit;
     Complex *twin;
@@ -168,7 +168,7 @@ void fft(Complex *old, int N) {
     }
 }
 
-void bitReversal(int *bit, int N) {
+void bitReversal(int bit[], int N) {
     int i, j;
     int r = (int)log2(N);
     for(i=0; i<N; i++) {
