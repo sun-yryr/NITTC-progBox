@@ -27,6 +27,7 @@ Polar polarTrans(Complex);
 Complex complexTrans(Polar);
 void fft(Complex[], int);
 void bitReversal(int[], int);
+void dft(Complex[], int);
 
 int main() {
     char filename[256];
@@ -48,14 +49,11 @@ int main() {
         data[i].im = 0;
         fscanf(fp, "%lf %lf\n", &data[i].re, &data[i].im);
     }
+    //fft(data, size);
+    dft(data, size);
     for(i=0; i<size; i++) {
         printf("[%d]: %f + %lf j\n", i, data[i].re, data[i].im);
     }
-    fft(data, size);
-    for(i=0; i<size; i++) {
-        printf("[%d]: %f + %lf j\n", i, data[i].re, data[i].im);
-    }
-    
     return 0;
 }
 
@@ -97,7 +95,7 @@ Complex division(Complex A, Complex B) {
 }
 
 void twid(Complex A[], int N) {
-    for(int i=0; i<N; i++) {
+    for(int i=0; i<N/2; i++) {
         double theta = (2 * M_PI) - ((2 * M_PI) / N) * i;
         A[i].re = cos(theta);
         A[i].im = sin(theta);
@@ -138,30 +136,41 @@ Complex complexTrans(Polar A) {
 void fft(Complex old[], int N) {
     int i, j;
     int *check, *bit;
-    Complex *twin;
+    Complex *twin, *new;
     check = (int*)malloc(N * sizeof(int));
     bit = (int*)malloc(N * sizeof(int));
-    twin = (Complex*)malloc(N * sizeof(Complex));
+    twin = (Complex*)malloc(N/2 * sizeof(Complex));
+    new = (Complex*)malloc(N * sizeof(Complex));
     bitReversal(bit, N);
     twid(twin, N);
     for(i=0; i<N; i++) {
-        old[bit[i]] = old[i];
+        new[bit[i]] = old[i];
         check[i] = 0;
+    }
+    for(i=0; i<N; i++) {
+        old[i] = new[i];
+        //printf("%lf %lf   %d\n", old[i].re, old[i].im, bit[i]);
     }
     int p = N / 2;
     //段数繰り返し
     for(i=0; i<(int)log2(N); i++, p/=2) {
         int nk = 0;
-        int next = i + (int)pow(2, i);
         for(j=0; j<N; j++) {
-            if(check[i] == 0) {
-                check[i] = 1; check[next] = 1;
+            int next = j + (int)pow(2, i);
+            if(check[j] == 0) {
+                check[j] = 1; check[next] = 1;
                 Complex tmp = multiplication(old[next], twin[nk]);
-                Complex ad = addition(old[i], tmp);
-                old[next] = subtraction(old[i], tmp);
-                old[i] = ad;
-                if((i!=0) && ((nk+p) < (N/2))) nk += p;
-                else nk = 0;
+                //printf("(%lf %lf) * (%lf %lf) = (%lf %lf)\n", old[next].re, old[next].im, twin[nk].re, twin[nk].im, tmp.re, tmp.im);
+                Complex ad = addition(old[j], tmp);
+                //printf("(%lf %lf) + (%lf %lf) = (%lf %lf)\n", old[j].re, old[j].im, tmp.re, tmp.im, ad.re, ad.im);
+                old[next] = subtraction(old[j], tmp);
+                //printf("(%lf %lf) - (%lf %lf) = (%lf %lf)\n", old[j].re, old[j].im, tmp.re, tmp.im, old[next].re, old[next].im);
+                old[j] = ad;
+                if((i!=0) && (nk+p) < (N/2)) nk += p;
+                else {
+                    nk = 0;
+                }
+                //printf("\n");
             }
         }
         for(int as=0; as<N; as++) check[as] = 0;
@@ -175,6 +184,24 @@ void bitReversal(int bit[], int N) {
         bit[i] = 0;
         for(j=0; j<r; j++) {
             bit[i] += ((i >> j)& 1) << (r - j - 1);
+        }
+    }
+}
+
+void dft(Complex Xn[], int N) {
+    Complex *xn;
+    xn = (Complex*)malloc(N * sizeof(Complex));
+    int i;
+    for(i=0; i<N; i++) {
+        xn[i].re = Xn[i].re;
+        xn[i].im = Xn[i].im;
+        Xn[i].re = 0;
+        Xn[i].im = 0;
+    }
+    for(i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            Xn[i].re += (xn[j].re * cos( ( (2*M_PI) /N) * j * i) + xn[j].im * sin( ( (2*M_PI) /N) * j * i));
+            Xn[i].im += (xn[j].im * cos( ( (2*M_PI) /N) * j * i) - xn[j].re * sin( ( (2*M_PI) /N) * j * i));
         }
     }
 }
