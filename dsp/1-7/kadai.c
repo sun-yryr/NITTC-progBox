@@ -180,7 +180,7 @@ void ifft(Complex old[], int N) {
         new[bit[i]] = old[i];
         if(i < N/2) {
             twin[i] = conjugate(twin[i]);
-            printf("twin[%d] = %lf %lf\n", i, twin[i].re, twin[i].im);
+            //printf("twin[%d] = %lf %lf\n", i, twin[i].re, twin[i].im);
         }
     }
     for(i=0; i<N; i++) {
