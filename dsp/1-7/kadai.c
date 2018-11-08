@@ -28,32 +28,47 @@ Complex complexTrans(Polar);
 void fft(Complex[], int);
 void bitReversal(int[], int);
 void dft(Complex[], int);
+void ifft(Complex[], int);
+void fftifft(Complex[], Complex[], int);
 
 int main() {
     char filename[256];
     FILE *fp;
-    int size, i=0;
+    int size, i=0, mode;
     printf("Hello World!\n");
+    printf("mode select\n|FFT  -> 1|\n|IFFT -> 2|\n|DFT  -> 3|  -> ");
+    scanf("%d", &mode);
+    if(mode < 1 || 3 < mode) exit(EXIT_FAILURE);
     printf("filename >> ");
     scanf("%s", filename);
     if ((fp = fopen(filename, "r")) == NULL) {
         printf("read_file open error.\n");
         exit(EXIT_FAILURE);
     }
-    printf("何点FFT: ");
+    printf("何点FFT(IFFT): ");
     scanf("%d", &size);
     Complex *data;
     data = (Complex*)malloc(size * sizeof(Complex));
     for(i=0; i<size; i++) {
         data[i].re = 0;
         data[i].im = 0;
-        fscanf(fp, "%lf %lf\n", &data[i].re, &data[i].im);
+        if(mode == 1 || mode == 3) fscanf(fp, "%lf\n", &data[i].re); //fft & dft
+        else if(mode == 2) fscanf(fp, "%lf %lf\n", &data[i].re, &data[i].im); //ifft
     }
-    //fft(data, size);
-    dft(data, size);
+    if(mode == 1) fft(data, size);
+    else if(mode == 2) ifft(data, size);
+    else dft(data, size);
+
+    if ((fp = fopen("./data/output.txt", "w")) == NULL) {
+        printf("write_file open error.\n");
+        exit(EXIT_FAILURE);
+    }
     for(i=0; i<size; i++) {
         printf("[%d]: %f + %lf j\n", i, data[i].re, data[i].im);
+        if(mode == 1 || mode == 3) fprintf(fp, "%lf %lf\n", data[i].re, data[i].im);
+        else if(mode == 2) fprintf(fp, "%lf\n", data[i].re);
     }
+    fclose(fp);
     return 0;
 }
 
@@ -105,7 +120,7 @@ void twid(Complex A[], int N) {
 Complex conjugate(Complex A) {
     Complex returnData;
     returnData.re = A.re;
-    returnData.im = -1 * A.im;
+    returnData.im = -1.0 * A.im;
     return returnData;
 }
 
@@ -134,10 +149,9 @@ Complex complexTrans(Polar A) {
 }
 
 void fft(Complex old[], int N) {
-    int i, j;
-    int *check, *bit;
+    int i;
+    int *bit;
     Complex *twin, *new;
-    check = (int*)malloc(N * sizeof(int));
     bit = (int*)malloc(N * sizeof(int));
     twin = (Complex*)malloc(N/2 * sizeof(Complex));
     new = (Complex*)malloc(N * sizeof(Complex));
@@ -145,11 +159,48 @@ void fft(Complex old[], int N) {
     twid(twin, N);
     for(i=0; i<N; i++) {
         new[bit[i]] = old[i];
-        check[i] = 0;
     }
     for(i=0; i<N; i++) {
         old[i] = new[i];
         //printf("%lf %lf   %d\n", old[i].re, old[i].im, bit[i]);
+    }
+    fftifft(old, twin, N);
+}
+
+void ifft(Complex old[], int N) {
+    int i;
+    int *bit;
+    Complex *twin, *new;
+    bit = (int*)malloc(N * sizeof(int));
+    twin = (Complex*)malloc(N/2 * sizeof(Complex));
+    new = (Complex*)malloc(N * sizeof(Complex));
+    bitReversal(bit, N);
+    twid(twin, N);
+    for(i=0; i<N; i++) {
+        new[bit[i]] = old[i];
+        if(i < N/2) {
+            twin[i] = conjugate(twin[i]);
+            printf("twin[%d] = %lf %lf\n", i, twin[i].re, twin[i].im);
+        }
+    }
+    for(i=0; i<N; i++) {
+        old[i] = new[i];
+        //printf("%lf %lf   %d\n", old[i].re, old[i].im, bit[i]);
+    }
+    fftifft(old, twin, N);
+    Complex tmp;
+    tmp.re = N; tmp.im = 0;
+    for(i=0; i<N; i++) {
+        old[i] = division(old[i], tmp);
+    }
+}
+
+void fftifft(Complex old[], Complex twin[], int N) {
+    int i, j;
+    int *check;
+    check = (int*)malloc(N * sizeof(int));
+    for(i=0; i<N; i++) {
+        check[i] = 0;
     }
     int p = N / 2;
     //段数繰り返し
@@ -167,9 +218,7 @@ void fft(Complex old[], int N) {
                 //printf("(%lf %lf) - (%lf %lf) = (%lf %lf)\n", old[j].re, old[j].im, tmp.re, tmp.im, old[next].re, old[next].im);
                 old[j] = ad;
                 if((i!=0) && (nk+p) < (N/2)) nk += p;
-                else {
-                    nk = 0;
-                }
+                else nk = 0;
                 //printf("\n");
             }
         }
