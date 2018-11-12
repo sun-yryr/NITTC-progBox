@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 #include <stdlib.h>
 
 #define LOG printf("line = %d\n", __LINE__);
@@ -30,11 +31,13 @@ void bitReversal(int[], int);
 void dft(Complex[], int);
 void ifft(Complex[], int);
 void fftifft(Complex[], Complex[], int);
+double shinpuku(Complex);
 
 int main() {
     char filename[256];
-    FILE *fp;
+    FILE *fp, *fp2;
     int size, i=0, mode;
+    clock_t start, end;
     printf("Hello World!\n");
     printf("mode select\n|FFT  -> 1|\n|IFFT -> 2|\n|DFT  -> 3|  -> ");
     scanf("%d", &mode);
@@ -45,7 +48,7 @@ int main() {
         printf("read_file open error.\n");
         exit(EXIT_FAILURE);
     }
-    printf("何点FFT(IFFT): ");
+    printf("何点FFT(IFFT, DFT): ");
     scanf("%d", &size);
     Complex *data;
     data = (Complex*)malloc(size * sizeof(Complex));
@@ -55,17 +58,28 @@ int main() {
         if(mode == 1 || mode == 3) fscanf(fp, "%lf\n", &data[i].re); //fft & dft
         else if(mode == 2) fscanf(fp, "%lf %lf\n", &data[i].re, &data[i].im); //ifft
     }
+    printf("読み込み完了\n計測開始します...\n");
+    start = clock();
     if(mode == 1) fft(data, size);
     else if(mode == 2) ifft(data, size);
     else dft(data, size);
+    end = clock();
+    printf("FFT(IFFT, DFT)終了\n処理時間は%f[s]です\n", (end - start)/(double)CLOCKS_PER_SEC);
 
     if ((fp = fopen("./data/output.txt", "w")) == NULL) {
         printf("write_file open error.\n");
         exit(EXIT_FAILURE);
     }
+    if ((mode != 2) && (fp2 = fopen("./data/振幅.txt", "w")) == NULL) {
+        printf("write_file open error.\n");
+        exit(EXIT_FAILURE);
+    }
     for(i=0; i<size; i++) {
-        printf("[%d]: %f + %lf j\n", i, data[i].re, data[i].im);
-        if(mode == 1 || mode == 3) fprintf(fp, "%lf %lf\n", data[i].re, data[i].im);
+        //printf("[%d]: %f + %lf j\n", i, data[i].re, data[i].im);
+        if(mode == 1 || mode == 3) {
+            fprintf(fp, "%lf %lf\n", data[i].re, data[i].im);
+            fprintf(fp2, "%lf\n", shinpuku(data[i]));
+        }
         else if(mode == 2) fprintf(fp, "%lf\n", data[i].re);
     }
     fclose(fp);
@@ -132,6 +146,10 @@ double absolute(Complex A) {
 double absolute2(Complex A) {
     Complex returnData = multiplication(A, conjugate(A));
     return returnData.re;
+}
+
+double shinpuku(Complex xn) {
+    return sqrt((xn.re*xn.re) + (xn.im*xn.im));
 }
 
 Polar polarTrans(Complex A) {
@@ -252,5 +270,6 @@ void dft(Complex Xn[], int N) {
             Xn[i].re += (xn[j].re * cos( ( (2*M_PI) /N) * j * i) + xn[j].im * sin( ( (2*M_PI) /N) * j * i));
             Xn[i].im += (xn[j].im * cos( ( (2*M_PI) /N) * j * i) - xn[j].re * sin( ( (2*M_PI) /N) * j * i));
         }
+        //if(i%1000 == 0) printf("%d\n", i);
     }
 }
