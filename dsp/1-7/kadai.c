@@ -149,7 +149,8 @@ double absolute2(Complex A) {
 }
 
 double shinpuku(Complex xn) {
-    return sqrt((xn.re*xn.re) + (xn.im*xn.im));
+    double tmp = sqrt((xn.re*xn.re) + (xn.im*xn.im));
+    return 20 * log(tmp);
 }
 
 Polar polarTrans(Complex A) {
