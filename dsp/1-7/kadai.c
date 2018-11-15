@@ -150,7 +150,7 @@ double absolute2(Complex A) {
 
 double shinpuku(Complex xn) {
     double tmp = sqrt((xn.re*xn.re) + (xn.im*xn.im));
-    return 20 * log(tmp);
+    return tmp;
 }
 
 Polar polarTrans(Complex A) {
