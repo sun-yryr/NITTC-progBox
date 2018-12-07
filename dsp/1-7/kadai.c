@@ -1,3 +1,4 @@
+//H30 DSP1-7 4J38
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
@@ -38,7 +39,8 @@ int main() {
     FILE *fp, *fp2;
     int size, i=0, mode;
     clock_t start, end;
-    printf("Hello World!\n");
+    //printf("Hello World!\n");
+    printf("H30 DSP1-7 4J38\n");
     printf("mode select\n|FFT  -> 1|\n|IFFT -> 2|\n|DFT  -> 3|  -> ");
     scanf("%d", &mode);
     if(mode < 1 || 3 < mode) exit(EXIT_FAILURE);
