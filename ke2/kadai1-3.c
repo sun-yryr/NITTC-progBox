@@ -55,7 +55,7 @@ int main() {
             phi = elim(B, p, q);
             makeR(p, q, phi);
             non_diag_max = getabs(B);
-            //printf("step=%d   dig_max=%lf\n", step, non_diag_max);
+            printf("step=%d   dig_max=%lf\n", step, non_diag_max);
         }
         /* ----------------------------------------------------- */
 
