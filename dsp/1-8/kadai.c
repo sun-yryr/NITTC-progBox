@@ -1,3 +1,4 @@
+//H30 dsp 1-8 4J38
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -10,6 +11,7 @@ int main() {
     int size;
     int *input_x, *output;
     double *input_h;
+    printf("H30 dsp 1-8 4J38\n");
 
     //ファイル読み込み
     printf("入力ファイル名:");
@@ -57,8 +59,9 @@ void fillter(int input_x[], double input_h[], int output[], int N) {
     for(i=0; i<N; i++) {
         for(j=N-1; j!=0; j--) new_x[j] = new_x[j-1];
         new_x[0] = input_x[i];
-        int answer = 0;
+        double answer = 0;
         for(j=0; j<N; j++) answer += new_x[j] * input_h[j];
         output[i] = answer;
+        //if(i%20==0) printf("aaa\n");
     }
 }

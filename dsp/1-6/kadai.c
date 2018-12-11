@@ -106,9 +106,10 @@ int main() {
         printf("録音時間　　　　　　　 = %.4lf\n", time);
 
         /* -- ファイル書き込み txt -- */
-        for (i=0; i<samples; i++) {
+        for (i=0; i<data.size; i++) {
             fread(&data.data, sizeof(short), 1, fp);
             fprintf(fp2, "%d\n", data.data);
+            fread(&data.data, sizeof(short), 1, fp);
         }
     } else if (mode == 2) {
         while (fgets(buf, BUF_SIZE, fp) != NULL) {
