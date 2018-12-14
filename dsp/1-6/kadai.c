@@ -109,7 +109,6 @@ int main() {
         for (i=0; i<data.size; i++) {
             fread(&data.data, sizeof(short), 1, fp);
             fprintf(fp2, "%d\n", data.data);
-            fread(&data.data, sizeof(short), 1, fp);
         }
     } else if (mode == 2) {
         while (fgets(buf, BUF_SIZE, fp) != NULL) {
@@ -152,9 +151,9 @@ int main() {
         double time = samples / (double)fmt2.fs;
         printf("--- 結果 ---\n");
         printf("ファイルサイズ　　　　 = %6d[byte]\n", filesize);
-        printf("チャネル数　　　　　　 = %6d\n", fmt2.channel);
-        printf("サンプリング周波数　　 = %6d[Hz]\n", fmt2.fs);
-        printf("量子化ビット　　　　　 = %6d\n", fmt2.bit);
+        printf("指定チャネル数　　　　　　 = %6d\n", fmt2.channel);
+        printf("指定サンプリング周波数　　 = %6d[Hz]\n", fmt2.fs);
+        printf("指定量子化ビット　　　　　 = %6d\n", fmt2.bit);
         printf("保存されているデータ数 = %6d\n", samples);
         printf("録音時間　　　　　　　 = %.4lf\n", time);
     }
