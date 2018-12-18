@@ -10,6 +10,7 @@ import Foundation
 import Accelerate
 
 func main() -> Int {
+    let moji = ["あ","い","う","え","お","か","き","く","け","こ","さ","し","す","せ","そ","た","ち","つ","て","と","な","に","ぬ","ね","の","は","ひ","ふ","へ","ほ","ま","み","む","め","も","や","ゆ","よ","ら","り","る","れ","ろ","わ","を","ん"]
     print("H30 kadai1-4 4J38")
     let argv = ProcessInfo().arguments
     if argv.count != 2 {
@@ -59,8 +60,11 @@ func main() -> Int {
             if (i == ans) {
                 ans_count += 1
             }
+            else {
+                print("誤認識： \(moji[i]) -> \(moji[ans])")
+            }
         }
-        print("index[\(i)] = \((Double(ans_count)/20.0)*100)% (\(ans_count)/20)")
+        print("\(moji[i]) = \((Double(ans_count)/20.0)*100)% (\(ans_count)/20)")
     }
     
     print("finish")
