@@ -61,7 +61,7 @@ func main() -> Int {
                 ans_count += 1
             }
             else {
-                print("誤認識： \(moji[i]) -> \(moji[ans])")
+                //print("誤認識： \(moji[i]) -> \(moji[ans])")
             }
         }
         print("\(moji[i]) = \((Double(ans_count)/20.0)*100)% (\(ans_count)/20)")
@@ -91,11 +91,11 @@ func maharanobis_minIndex(Target sampleData :[Double], Average aveData :[[Double
     var index = -1
     var ans = 10000000.0
     var xSubm: [Double]
-    let d = 100.0
+    let d = 20.0
     for i in 0 ..< aveData.count {
         var tmp_d = 0.0
         xSubm = matrix_sub(Target: sampleData, Target2: aveData[i])
-        for j in 0 ..< 180 {
+        for j in 0 ..< 120 {
             var tmp_xmek = 0.0
             for m in 0 ..< 196 {
                 tmp_xmek += xSubm[m] * vctData[i][m][j]
