@@ -33,6 +33,7 @@ void dft(Complex[], int);
 void ifft(Complex[], int);
 void fftifft(Complex[], Complex[], int);
 double shinpuku(Complex);
+void idft(Complex[], int);
 
 int main() {
     char filename[256];
@@ -41,16 +42,16 @@ int main() {
     clock_t start, end;
     //printf("Hello World!\n");
     printf("H30 DSP1-7 4J38\n");
-    printf("mode select\n|FFT  -> 1|\n|IFFT -> 2|\n|DFT  -> 3|  -> ");
+    printf("mode select\n|FFT  -> 1|\n|IFFT -> 2|\n|DFT  -> 3|\n|IDFT  -> 4|  -> ");
     scanf("%d", &mode);
-    if(mode < 1 || 3 < mode) exit(EXIT_FAILURE);
+    if(mode < 1 || 4 < mode) exit(EXIT_FAILURE);
     printf("filename >> ");
     scanf("%s", filename);
     if ((fp = fopen(filename, "r")) == NULL) {
         printf("read_file open error.\n");
         exit(EXIT_FAILURE);
     }
-    printf("何点FFT(IFFT, DFT): ");
+    printf("何点FFT(IFFT, DFT, IDFT): ");
     scanf("%d", &size);
     Complex *data;
     data = (Complex*)malloc(size * sizeof(Complex));
@@ -58,13 +59,14 @@ int main() {
         data[i].re = 0;
         data[i].im = 0;
         if(mode == 1 || mode == 3) fscanf(fp, "%lf\n", &data[i].re); //fft & dft
-        else if(mode == 2) fscanf(fp, "%lf %lf\n", &data[i].re, &data[i].im); //ifft
+        else if(mode == 2 || mode == 4) fscanf(fp, "%lf %lf\n", &data[i].re, &data[i].im); //ifft
     }
     printf("読み込み完了\n計測開始します...\n");
     start = clock();
     if(mode == 1) fft(data, size);
     else if(mode == 2) ifft(data, size);
-    else dft(data, size);
+    else if(mode == 3)dft(data, size);
+    else idft(data, size);
     end = clock();
     printf("FFT(IFFT, DFT)終了\n処理時間は%f[s]です\n", (end - start)/(double)CLOCKS_PER_SEC);
 
@@ -72,7 +74,7 @@ int main() {
         printf("write_file open error.\n");
         exit(EXIT_FAILURE);
     }
-    if ((mode != 2) && (fp2 = fopen("./data/振幅.txt", "w")) == NULL) {
+    if ((mode != 2 && mode != 4) && (fp2 = fopen("./data/振幅.txt", "w")) == NULL) {
         printf("write_file open error.\n");
         exit(EXIT_FAILURE);
     }
@@ -82,7 +84,7 @@ int main() {
             fprintf(fp, "%lf %lf\n", data[i].re, data[i].im);
             fprintf(fp2, "%lf\n", shinpuku(data[i]));
         }
-        else if(mode == 2) fprintf(fp, "%lf\n", data[i].re);
+        else if(mode == 2 || mode == 4) fprintf(fp, "%lf\n", data[i].re);
     }
     fclose(fp);
     return 0;
@@ -274,5 +276,26 @@ void dft(Complex Xn[], int N) {
             Xn[i].im += (xn[j].im * cos( ( (2*M_PI) /N) * j * i) - xn[j].re * sin( ( (2*M_PI) /N) * j * i));
         }
         //if(i%1000 == 0) printf("%d\n", i);
+    }
+}
+
+void idft(Complex Xn[], int N) {
+    int a = -1;
+    Complex *xn;
+    xn = (Complex*)malloc(N * sizeof(Complex));
+    int i;
+    for(i=0; i<N; i++) {
+        xn[i].re = Xn[i].re;
+        xn[i].im = Xn[i].im;
+        Xn[i].re = 0;
+        Xn[i].im = 0;
+    }
+    for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            Xn[i].re += (xn[j].re * cos( ( (2*M_PI) /N) * j * i) + a* xn[j].im * sin( ( (2*M_PI) /N) * j * i));
+            Xn[i].im += (xn[j].im * cos( ( (2*M_PI) /N) * j * i) - a* xn[j].re * sin( ( (2*M_PI) /N) * j * i));
+        }
+        Xn[i].re = Xn[i].re / N;
+        Xn[i].im = Xn[i].im / N;
     }
 }
