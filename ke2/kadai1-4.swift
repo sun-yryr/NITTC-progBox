@@ -35,7 +35,7 @@ func main() -> Int {
         var tmp :[[Double]] = Array(repeating: Array(repeating: 0.0, count: 196), count: 20);
         for i in 0 ..< 20 {
             for j in 0 ..< 196 {
-                tmp[i][j] = tmpSmp[196*(160+i)+j]
+                tmp[i][j] = tmpSmp[196*(180+i)+j]
             }
         }
         return tmp
