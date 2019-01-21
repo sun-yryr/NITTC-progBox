@@ -61,7 +61,7 @@ func main() -> Int {
                 ans_count += 1
             }
             else {
-                //print("誤認識： \(moji[i]) -> \(moji[ans])")
+                print("誤認識： \(moji[i]) -> \(moji[ans])")
             }
         }
         print("\(moji[i]) = \((Double(ans_count)/20.0)*100)% (\(ans_count)/20)")
