@@ -6,7 +6,9 @@ class main {
         Algorithm ag;
         try {
             ag = new Algorithm();
-            ag.Display();
+            for(int i=100; i<120; i++) {
+                ag.genetic_algorithm(i);
+            }
         } catch (Exception e) {
             System.out.print(e);
         }
