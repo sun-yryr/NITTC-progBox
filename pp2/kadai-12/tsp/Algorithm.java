@@ -60,6 +60,6 @@ public class Algorithm {
         for(int i=1; i<5000; i++) {
             ans += map[route[i-1]][route[i]];
         }
-        System.out.println(ans);
+        System.out.printf("answer = %d\n", ans);
     }
 }

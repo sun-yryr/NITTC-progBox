@@ -1,4 +1,5 @@
 import tsp.Algorithm;
+import java.io.*;
 
 
 class main {
@@ -6,9 +7,12 @@ class main {
         Algorithm ag;
         try {
             ag = new Algorithm();
-            for(int i=100; i<120; i++) {
-                ag.genetic_algorithm(i);
-            }
+            System.out.print("始点を入力>> ");
+            InputStreamReader isr = new InputStreamReader(System.in);
+            BufferedReader br = new BufferedReader(isr);
+            String buf = br.readLine();
+            int x = Integer.parseInt(buf);
+            ag.genetic_algorithm(x);
         } catch (Exception e) {
             System.out.print(e);
         }
