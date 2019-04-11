@@ -4,3 +4,6 @@
 .DS_Store
 *.zip
 *.out
+
+# VSCode
+.vscode/
