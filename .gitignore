@@ -8,3 +8,4 @@
 # VSCode
 .vscode/
 *dSYM/
+.build/
