@@ -42,7 +42,7 @@ int main() {
     //swap_without_address(a, b);
     //swap_in_temporary(&a, &b);
     //swap_without_temporary(&a, &b);
-    //swap_xor(&a, &b);
+    swap_xor(&a, &b);
     printf("%4d  %4d\n",a,b);
     return 0;
 }
