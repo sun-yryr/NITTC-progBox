@@ -33,6 +33,7 @@ void dft(Complex[], int);
 void ifft(Complex[], int);
 void fftifft(Complex[], Complex[], int);
 double shinpuku(Complex);
+void autocorr(Complex*, int);
 
 int main() {
     char filename[256];
@@ -87,6 +88,18 @@ int main() {
     fclose(fp);
     return 0;
 }
+
+void autocorr(Complex a[], int n) {
+    float s;    // Σ用
+    N = n/2;
+    for (j = 0; j <= N; j++) {
+       s = 0;
+       for (i = 1; i <= N; i++) {
+          s = s + v[i] * v[i+j];
+      }
+       r[j] = s;
+   }
+    if(r[0]) for (j = 0; j <= N; j++) r[j] = r[j] / r[0]; }
 
 Complex addition(Complex A, Complex B) {
     Complex returnData;

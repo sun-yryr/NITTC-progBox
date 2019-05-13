@@ -33,6 +33,7 @@ void ifft(Complex[], int);
 void fftifft(Complex[], Complex[], int);
 double shinpuku(Complex);
 void idft(Complex[], int);
+void autocorr(Complex a[], Complex b[], int n);
 
 int main(int argc, char *argv[]) {
     if(argc != 2) {
@@ -73,6 +74,19 @@ int main(int argc, char *argv[]) {
         fprintf(fp, "%lf\n", data[i].re);
     }
     return 0;
+}
+
+void autocorr(Complex a[], Complex b[], int n) {
+    Complex s;
+    int N = n/2;
+    for (int j = 0; j <= N; j++) {
+       s.re = 0; s.im = 0;
+       for (int i = 1; i <= N; i++) {
+          s = addition(s, multiplication(a[i], a[i+j]));
+      }
+       b[j] = s;
+   }
+    if(b[0].re != 0 && b[0].im != 0) for (int j = 0; j <= N; j++) b[j] = division(b[j], b[0]);
 }
 
 Complex addition(Complex A, Complex B) {
