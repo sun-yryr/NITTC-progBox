@@ -36,7 +36,7 @@ void idft(Complex[], int);
 void autocorr(Complex a[], Complex b[], int n);
 
 int main(int argc, char *argv[]) {
-    if(argc != 2) {
+    if(argc != 3) {
         printf("引数エラー\n");
         return 0;
     }
@@ -44,38 +44,41 @@ int main(int argc, char *argv[]) {
     char buf[256];
 
     fp = fopen(argv[1], "r");
+    fp2 = fopen(argv[2], "r");
     int input_size = 0;
     while(fgets(buf, 256, fp) != NULL) input_size++;
     fseek(fp, 0, SEEK_SET);
     int size = 2*input_size;
     while(size & (size-1)) size++;
-    Complex *data, *out;
-    data = (Complex*)malloc(sizeof(Complex) * size);
-    out = (Complex*)malloc(sizeof(Complex) * input_size);
+    Complex *dataA, *dataB;
+    dataA = (Complex*)malloc(sizeof(Complex) * size);
+    dataB = (Complex*)malloc(sizeof(Complex) * size);
     double tmp;
     for(int i=0; i<input_size; i++) {
         fscanf(fp, "%lf", &tmp);
-        data[i].re = tmp;
-        data[i].im = 0;
+        dataA[i].re = tmp;
+        dataA[i].im = 0;
+        fscanf(fp2, "%lf", &tmp);
+        dataB[i].re = tmp;
+        dataB[i].im = 0;
     }
-    fclose(fp);
+    fclose(fp); fclose(fp2);
     for(int i=input_size; i<size; i++) {
-        data[i].re = 0;
-        data[i].im = 0;
+        dataA[i].re = 0;
+        dataA[i].im = 0;
+        dataB[i].re = 0;
+        dataB[i].im = 0;
     }
-    autocorr(data, out, input_size);
-    fft(data, size);
+    fft(dataA, size); fft(dataB, size);
     for(int i=0; i<size; i++) {
-        data[i].re = absolute2(data[i]);
-        data[i].im = 0;
+        dataB[i] = conjugate(dataB[i]);
+        dataA[i] = multiplication(dataA[i], dataB[i]);
     }
-    ifft(data, size);
+    ifft(dataA, size);
     fp = fopen("output.txt", "w");
-    fp2 = fopen("output2.txt", "w");
     for(int i=0; i<input_size; i++) {
-        data[i].re = data[i].re/input_size;
-        fprintf(fp, "%lf\n", data[i].re);
-        fprintf(fp2, "%lf\n", data[i].re);
+        dataA[i].re = dataA[i].re/input_size;
+        fprintf(fp, "%lf\n", dataA[i].re);
     }
     return 0;
 }
