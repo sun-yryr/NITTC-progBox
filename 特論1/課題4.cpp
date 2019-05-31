@@ -18,7 +18,7 @@ int rand7(){
     mt19937 mt(rnd());     //  メルセンヌ・ツイスタの32ビット版、引数は初期シード値
     uniform_int_distribution<> rand5(1, 5);        // [0, 99] 範囲の一様乱数
     int tmp = 0;
-    REP(i, 5) tmp += rand5(mt);
+    REP(i, 8) tmp += rand5(mt);
     if (tmp == 40) {
         tmp--;
     }
@@ -38,11 +38,13 @@ int randaaaaa(){
 
 int main() {
     int ans[8] = {0};
+    int ans2[8] = {0};
     int kaisu = 100000;
     REP(i,kaisu) {
-        ans[randaaaaa()]++;
+        ans[rand7()]++;
     }
     for(int i=1; i<=7; i++) {
+        printf("[%d] ", i);
         OUT(ans[i]/(double)kaisu);
     }
     return 0;

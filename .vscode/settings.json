@@ -3,7 +3,8 @@
     "python.linting.pylintEnabled": true,
     "files.associations": {
         "iostream": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "random": "cpp"
     },
     "codic.case": "snake_case"
 }
