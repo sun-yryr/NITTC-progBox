@@ -45,6 +45,7 @@ int findMSS(vector<int> a) {
    dpに負の数があるので偶数になる最大範囲を出す（高々2つ）
    見つけた範囲の最大積を返す
    再帰するたびにNが分裂するのでO(N)だと思う（どうだろう）
+   これdpって変数だけど累積和だよなと
 */
 int dp[100000];
 int findMPP_fix(vector<int> a, int start, int end) {
@@ -109,6 +110,7 @@ int main() {
         else if(t[i] < 0) dp[i] = dp[i-1] + 1;
         else dp[i] = dp[i-1];
     }
-    OUT(findMPP_fix(t, 0, t.size()-1));
+    cout << "old: " << findMPP(t) << "\n";
+    cout << "fix: " << findMPP_fix(t, 0, t.size()-1) << "\n";
     return 0;
 }
