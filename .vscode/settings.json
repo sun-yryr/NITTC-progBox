@@ -4,7 +4,8 @@
     "files.associations": {
         "iostream": "cpp",
         "chrono": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "vector": "cpp"
     },
     "codic.case": "snake_case"
 }

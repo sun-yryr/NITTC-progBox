@@ -33,8 +33,35 @@ void create_normal_orthogonal_base(vector<vector<double> >& base) {
     OUT("---------");
 }
 
-int main() {
-    vector<double> input;
-    int size = 4;
+void transposed_matrix(vector<vector<double> >& matrix) {
+    int n = matrix.size();
+    for(int i=0; i<n; i++) {
+        for(int j=i+1; j<n; j++) {
+            swap(matrix[i][j], matrix[j][i]);
+        }
+    }
+}
 
+int main() {
+    int size = 4;
+    double tmp;
+    scanf("%d", &size);
+    vector<vector<double> > input = vector<vector<double> >(size, vector<double>(size, 0));
+    for(int i=0; i<size; i++) {
+        for(int j=0; j<size; j++) {
+            scanf("%lf", &input[i][j]);
+            getchar();
+        }
+    }
+    vector<vector<double> > base = vector<vector<double> >(size, vector<double>(size, 0));
+    vector<vector<double> > base2 = vector<vector<double> >(size, vector<double>(size, 0));
+    vector<vector<double> > ans = vector<vector<double> >(size, vector<double>(size, 0));
+    create_normal_orthogonal_base(base);
+    create_normal_orthogonal_base(base2);
+    transposed_matrix(base2);
+    for(int i=0; i<size; i++) {
+        for(int j=0; j<size; j++) {
+            ans[i] ;
+        }
+    }
 }
