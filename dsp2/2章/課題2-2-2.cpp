@@ -23,6 +23,7 @@ void create_normal_orthogonal_base(vector<vector<double> >& base) {
             }
         }
     }
+    /*
     OUT("直交基底");
     REP(i,max_rc) {
         REP(j, max_rc) {
@@ -31,6 +32,7 @@ void create_normal_orthogonal_base(vector<vector<double> >& base) {
         cout << "\n";
     }
     OUT("---------");
+    */
 }
 
 void transposed_matrix(vector<vector<double> >& matrix) {
