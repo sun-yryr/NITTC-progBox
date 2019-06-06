@@ -55,13 +55,28 @@ int main() {
     }
     vector<vector<double> > base = vector<vector<double> >(size, vector<double>(size, 0));
     vector<vector<double> > base2 = vector<vector<double> >(size, vector<double>(size, 0));
+    vector<vector<double> > aaa = vector<vector<double> >(size, vector<double>(size, 0));
     vector<vector<double> > ans = vector<vector<double> >(size, vector<double>(size, 0));
     create_normal_orthogonal_base(base);
     create_normal_orthogonal_base(base2);
     transposed_matrix(base2);
     for(int i=0; i<size; i++) {
         for(int j=0; j<size; j++) {
-            ans[i] ;
+            for(int k=0; k<size; k++) {
+                aaa[i][j] += base[i][k] * input[k][j];
+            }
         }
+    }for(int i=0; i<size; i++) {
+        for(int j=0; j<size; j++) {
+            for(int k=0; k<size; k++) {
+                ans[i][j] += aaa[i][k] * base2[k][j];
+            }
+        }
+    }
+    for(int i=0; i<size; i++) {
+        for(int j=0; j<size; j++) {
+            printf("%lf ", ans[i][j]);
+        }
+        printf("\n");
     }
 }
