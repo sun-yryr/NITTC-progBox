@@ -7,5 +7,6 @@
         "random": "cpp",
         "vector": "cpp"
     },
-    "codic.case": "snake_case"
+    "codic.case": "snake_case",
+    "C_Cpp.errorSquiggles": "Disabled"
 }
