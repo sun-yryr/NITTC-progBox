@@ -24,6 +24,10 @@ ll MOD = 10e9 + 7;
     正しいスロットの正しい色を推測すると、「ヒット」します。存在しているが間違ったスロットにある色を推測すると、「擬似ヒット」が表示されます。 疑似ヒット
     推測ごとに、ヒット数と疑似ヒット数が表示されます。
     推測と解が与えられたときに、ヒット数と疑似ヒット数を返すメソッドを作成します。
+
+
+    example : コンピュータ「YYYY」　ユーザ「GYBR」
+              ここで，正解が1,3なのか，1,0なのかが気になる。このコードは1,3を出力するように組んだ。
  */
 
 // first -> ヒット数
@@ -32,8 +36,8 @@ pair<int, int> Hits(char ans[4], char select[4]) {
     pair<int, int> a = make_pair(0, 0);
     REP(i, 4) {
         if(ans[i] == select[i]) a.first++;
-        for(int j=i+1; j<4; j++) {
-            if(ans[i] == select[j]) a.second++;
+        REP(j, 4) {
+            if(i != j && ans[i] == select[j]) a.second++;
         }
     }
     return a;
@@ -41,7 +45,7 @@ pair<int, int> Hits(char ans[4], char select[4]) {
 
 
 int main(int argc, char const *argv[]) {
-    char *a = "YRGB";
+    char *a = "YYYY";
     char *b = "YRBB";
     pair<int, int> ans = Hits(a, b);
     cout << "Hit : " << ans.first << endl;
