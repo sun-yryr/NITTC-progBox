@@ -27,27 +27,64 @@ ll MOD = 10e9 + 7;
 
 
     example : コンピュータ「YYYY」　ユーザ「GYBR」
-              ここで，正解が1,3なのか，1,0なのかが気になる。このコードは1,3を出力するように組んだ。
+              ここで，正解が1,3なのか，1,0なのかが気になる。このコードは1,0を出力するように組んだ。
  */
 
 // first -> ヒット数
 // second -> 擬似ヒット数
-pair<int, int> Hits(char ans[4], char select[4]) {
+// O(N^2) 愚直解
+pair<int, int> Hits(string ans, string select) {
     pair<int, int> a = make_pair(0, 0);
-    REP(i, 4) {
-        if(ans[i] == select[i]) a.first++;
-        REP(j, 4) {
-            if(i != j && ans[i] == select[j]) a.second++;
+    if (ans.size() != select.size()) return a;
+    int N = ans.size();
+    REP(i, N) {
+        if(ans[i] == select[i]) {
+            a.first++;
+            ans[i] = '#';
+            select[i] = '.';
         }
+    }
+    REP(i, N) REP(j, N) {
+        if (ans[j] == select[i]) {
+            a.second++;
+            ans[j] = '#';
+            select[i] = '.';
+        }
+    }
+    return a;
+}
+
+// O(N) いいぞ
+pair<int, int> Hits_N_ron(string ans, string select) {
+    pair<int, int> a = make_pair(0, 0);
+    if (ans.size() != select.size()) return a;
+    int N = ans.size();
+    char ball[] = {'R', 'Y', 'G', 'B'};
+    int count_ans[4] = {0, 0, 0, 0}; // R, Y, G, B
+    int count_select[4] = {0, 0, 0, 0}; //R, T, G, B
+    REP(i, N) {
+        if (ans[i] == select[i]) ++a.first;
+        else {
+            REP(j, 4) {
+                if (ans[i] == ball[j]) ++count_ans[j];
+                if (select[i] == ball[j]) ++count_select[j];
+            }
+        }
+    }
+    REP(i, 4) {
+        a.second += min(count_ans[i], count_select[i]);
     }
     return a;
 }
 
 
 int main(int argc, char const *argv[]) {
-    char *a = "YYYY";
-    char *b = "YRBB";
-    pair<int, int> ans = Hits(a, b);
+    string a = "YRGBG";
+    string b = "GRYYY";
+    pair<int, int> ans = Hits_N_ron(a, b);
+    cout << "Hit : " << ans.first << endl;
+    cout << "Bite : " << ans.second << endl;
+    ans = Hits(a, b);
     cout << "Hit : " << ans.first << endl;
     cout << "Bite : " << ans.second << endl;
     return 0;
