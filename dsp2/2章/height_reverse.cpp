@@ -60,15 +60,17 @@ void display_RGB(RGBDATA a);
 void display_infomation(BITMAP bmpfile);
 
 int main(int argc, char const *argv[]) {
-    FILE *fp;
+    FILE *fp, *fp2;
     fp = fopen(argv[1], "rb");
-    if (fp == NULL) {
+    fp2 = fopen(argv[2], "wb");
+    if (fp == NULL || fp2 == NULL) {
         printf("error\n");
         return 0;
     }
     BITMAP bmpfile;
     load_bitmap_file(fp, bmpfile);
-    display_infomation(bmpfile);
+    bmpfile.info.height *= -1;
+    write_bitmap_file(fp2, bmpfile);
     return 0;
 }
 

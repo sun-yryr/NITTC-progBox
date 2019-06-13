@@ -18,26 +18,26 @@ ll MOD = 10e9 + 7;
 
 struct BITMAPFILEHEADER {
     /* data */
-    char type[2];
-    uint size;
-    ushort reserved1;
-    ushort reserved2;
-    uint offBits;
+    char type[2] = {'B','M'};
+    uint size = 43254;
+    ushort reserved1 = 0;
+    ushort reserved2 = 0;
+    uint offBits = 54;
 };
 
 struct BITMAPINFOHEADER {
     /* data */
-    uint size;
-    int width;
-    int height;
-    ushort planes;
-    ushort bitCount;
-    uint compression;
-    uint sizeImage;
-    int xPixPerMeter;
-    int yPixPerMeter;
-    uint clrUsed;
-    uint clrImportant;
+    uint size = 40;
+    int width = 120;
+    int height = 120;
+    ushort planes = 1;
+    ushort bitCount = 24;
+    uint compression = 0;
+    uint sizeImage = 43200;
+    int xPixPerMeter = 0;
+    int yPixPerMeter = 0;
+    uint clrUsed = 0;
+    uint clrImportant = 0;
 };
 
 struct RGBDATA {
@@ -61,62 +61,16 @@ void display_infomation(BITMAP bmpfile);
 
 int main(int argc, char const *argv[]) {
     FILE *fp;
-    fp = fopen(argv[1], "rb");
+    fp = fopen(argv[1], "wb");
     if (fp == NULL) {
         printf("error\n");
         return 0;
     }
     BITMAP bmpfile;
-    load_bitmap_file(fp, bmpfile);
-    display_infomation(bmpfile);
+    RGBDATA tmp = {0,0,0,0};
+    bmpfile.image = vector<vector<RGBDATA> >(bmpfile.info.height, vector<RGBDATA>(bmpfile.info.width, tmp));
+    write_bitmap_file(fp, bmpfile);
     return 0;
-}
-
-void load_bitmap_file(FILE *fp, BITMAP& bmpfile) {
-    long stream = ftell(fp);
-    // file header 読み込み
-    fseek(fp, 0, SEEK_SET);
-    fread(bmpfile.file.type, 1, 2, fp);
-    fread(&bmpfile.file.size, 4, 1, fp);
-    fread(&bmpfile.file.reserved1, 2, 1, fp);
-    fread(&bmpfile.file.reserved2, 2, 1, fp);
-    fread(&bmpfile.file.offBits, 4, 1, fp);
-    // info header 読み込み
-    fseek(fp, 14, SEEK_SET);
-    fread(&bmpfile.info.size, 4, 1, fp);
-    fread(&bmpfile.info.width, 4, 1, fp);
-    fread(&bmpfile.info.height, 4, 1, fp);
-    fread(&bmpfile.info.planes, 2, 1, fp);
-    fread(&bmpfile.info.bitCount, 2, 1, fp);
-    fread(&bmpfile.info.compression, 4, 1, fp);
-    fread(&bmpfile.info.sizeImage, 4, 1, fp);
-    fread(&bmpfile.info.xPixPerMeter, 4, 1, fp);
-    fread(&bmpfile.info.yPixPerMeter, 4, 1, fp);
-    fread(&bmpfile.info.clrUsed, 4, 1, fp);
-    fread(&bmpfile.info.clrImportant, 4, 1, fp);
-    // RGBDATA 読み込み
-    fseek(fp, bmpfile.file.offBits, SEEK_SET);
-    int height = abs(bmpfile.info.height);
-    int width = abs(bmpfile.info.width);
-    if (bmpfile.image.size() != height || bmpfile.image.front().size() != width) {
-        RGBDATA a = {0, 0, 0, 0};
-        bmpfile.image = vector<vector<RGBDATA> >(height, vector<RGBDATA>(width, a));
-    }
-    int index_i;
-    for(int i=0; i<height; i++) {
-        // heightが負の値なら反転して読み取る
-        if (bmpfile.info.height < 0) index_i = height - 1 - i;
-        else index_i = i;
-        for(int j=0; j<width; j++) {
-            //BGR
-            fread(&bmpfile.image[index_i][j].B, 1, 1, fp);
-            fread(&bmpfile.image[index_i][j].G, 1 ,1, fp);
-            fread(&bmpfile.image[index_i][j].R, 1, 1, fp);
-            if (bmpfile.info.bitCount == 32) fread(&bmpfile.image[index_i][j].Reserved, 1, 1, fp);
-        }
-    }
-    // 元の位置に戻す
-    fseek(fp, stream, SEEK_SET);
 }
 
 void write_bitmap_file(FILE *fp, BITMAP bmpfile) {

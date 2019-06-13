@@ -40,11 +40,34 @@ ll count_factorial_trailing_zero(int n) {
     return count_zero;
 }
 
+ll count_factorial_trailing_zero_fix(int n) {
+    ll count = 0;
+    int max_k = log(n)/log(5);
+    for(int k=1; k<=max_k; k++) {
+        count += n/pow(5, k);
+    }
+    return count;
+}
+
+ll count_factorial_trailing_zero_bt(int n) {
+    ll count = 0;
+    for(ll i=5; i<=n; i+=5) {
+        ll tmp = i;
+        while(tmp/5!=0) {
+            if(tmp%5!=0) break;
+            count++;
+            tmp/=5;
+        }
+    }
+    return count;
+}
+
 
 int main(int argc, char const *argv[]) {
     printf("N = ");
     int n;
     cin >> n;
-    printf("末尾の0は%lld個です\n", count_factorial_trailing_zero(n));
+    printf("yr : 末尾の0は%lld個です\n", count_factorial_trailing_zero_fix(n));
+    printf("bt : 末尾の0は%lld個です\n", count_factorial_trailing_zero_bt(n));
     return 0;
 }

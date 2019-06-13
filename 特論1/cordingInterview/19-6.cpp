@@ -135,28 +135,28 @@ string change_english(int num) {
     return "";
 }
 
-string transform_english_number(int num) {
-    string ans = "";
+vector<string> transform_english_number(int num) {
+    vector<string> ans;
     int digit = static_cast<int>(log10(num)) +1;
     if(digit == 6) {
         int tmp = static_cast<int>(num/100000);
-        ans += change_english(tmp) + " hundred ";
+        ans.push_back(change_english(tmp) + " hundred ");
         num -= tmp*100000;
         digit = static_cast<int>(log10(num)) +1;
     }
     if(3 < digit) {
         int tmp = static_cast<int>(num/1000);
-        ans += change_english(tmp) + " thousand ";
+        ans.push_back(change_english(tmp) + " thousand ");
         num -= tmp*1000;
         digit = static_cast<int>(log10(num)) +1;
     }
     if(digit == 3) {
         int tmp = static_cast<int>(num/100);
-        ans += change_english(tmp) + " hundred ";
+        ans.push_back(change_english(tmp) + " hundred ");
         num -= tmp*100;
         digit = static_cast<int>(log10(num)) +1;
     }
-    if(1 <= digit) ans += change_english(num);
+    if(1 <= digit) ans.push_back(change_english(num));
     return ans;
 }
 
@@ -164,6 +164,11 @@ int main(int argc, char const *argv[]) {
     printf("num = ");
     int n;
     cin >> n;
-    OUT(transform_english_number(n));
+    vector<string> ans = transform_english_number(n);
+    //ans.insert(ans.end()-1, "and ");
+    REP(i, ans.size()) {
+        cout << ans[i];
+    }
+    cout << endl;
     return 0;
 }
