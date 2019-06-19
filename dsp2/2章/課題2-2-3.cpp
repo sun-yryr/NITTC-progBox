@@ -68,7 +68,12 @@ int main(int argc, char const *argv[]) {
     }
     BITMAP bmpfile;
     load_bitmap_file(fp, bmpfile);
-    display_infomation(bmpfile);
+    //display_infomation(bmpfile);
+    
+    printf("1個目 : "); display_RGB(bmpfile.image[0][0]);
+    printf("5000個目 : "); display_RGB(bmpfile.image[4999/120][4999%120]);
+    printf("14400個目 : "); display_RGB(bmpfile.image[14399/120][14399%120]);
+    
     return 0;
 }
 
