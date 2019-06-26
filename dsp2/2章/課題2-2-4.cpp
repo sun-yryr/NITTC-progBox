@@ -45,11 +45,6 @@ struct RGBDATA {
     uint G;
     uint B;
     uint Reserved;
-
-    YCCDATA toYCC() {
-        YCCDATA a = {0.299*R+0.587*G+0.114*B, -0.169*R-0.331*G+0.5*B, 0.5*R-0.419*G-0.081*B};
-        return a;
-    }
 };
 
 struct BITMAP {
@@ -62,11 +57,6 @@ struct YCCDATA {
     uint Y;
     uint Cb;
     uint Cr;
-
-    RGBDATA toRGB() {
-        RGBDATA a = {Y+1.402*Cr, Y-0.344Cb-0.714Cr, Y+1.772Cb, 0};
-        return a;
-    }
 };
 
 // 宣言
@@ -75,6 +65,8 @@ void write_bitmap_file(FILE *fp, BITMAP bmpfile);
 void display_RGB(RGBDATA a);
 void display_infomation(BITMAP bmpfile);
 void two_dimensional_DCT();
+YCCDATA toYCC(RGBDATA);
+RGBDATA toRGB(YCCDATA);
 
 int main(int argc, char const *argv[]) {
     FILE *fp;
@@ -83,20 +75,28 @@ int main(int argc, char const *argv[]) {
         printf("error\n");
         return 0;
     }
+    FILE *fp2;
+    fp2 = fopen(argv[2], "wb");
+    if (fp2 == NULL) {
+        printf("error\n");
+        return 0;
+    }
     BITMAP bmpfile;
     load_bitmap_file(fp, bmpfile);
-    vector<vector<YCCDATA> > result_data = vector<vector<YCCDATA>(120, vector<YCCDATA>(120, {0,0,0}));
+    YCCDATA p = {0,0,0};
+    vector<vector<YCCDATA> > result_data = vector<vector<YCCDATA> >(120, vector<YCCDATA>(120, p));
     // ブロック全体のループ
-    for(int i=0; i<120; i+=8) {
-        for(int j=0; j<120; j+=8) {
-            for(int row=i; row<i+8; row++) {
-                for(int col=j; col<j+8; col++) {
-
-                }
-            }
+    for(int i=0; i<120; i++) {
+        for(int j=0; j<120; j++) {
+            result_data[i][j] = toYCC(bmpfile.image[i][j]);
         }
     }
-    
+    for(int i=0; i<120; i++) {
+        for(int j=0; j<120; j++) {
+            fprintf(fp2, "%d ", result_data[i][j].Y);
+        }
+        fprintf(fp2, "\n");
+    }
     return 0;
 }
 
@@ -205,4 +205,14 @@ void display_infomation(BITMAP bmpfile) {
     printf("biYPixPerMeter : %d\n", bmpfile.info.yPixPerMeter);
     printf("biClrUesd : %d\n", bmpfile.info.clrUsed);
     printf("biClrImportant : %d\n", bmpfile.info.clrImportant);
+}
+
+YCCDATA toYCC(RGBDATA t) {
+    YCCDATA a = {0.299*t.R+0.587*t.G+0.114*t.B, -0.169*t.R-0.331*t.G+0.5*t.B, 0.5*t.R-0.419*t.G-0.081*t.B};
+    return a;
+}
+
+RGBDATA toRGB(YCCDATA t) {
+    RGBDATA a = {t.Y+1.402*t.Cr, t.Y-0.344*t.Cb-0.714*t.Cr, t.Y+1.772*t.Cb, 0};
+    return a;
 }
