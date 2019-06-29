@@ -37,27 +37,19 @@ int sub_no_arithm(int a, int b) {
 
 // add_no_arithmを使わない方
 int sub_no_arithm2(int a, int b) {
-    b = ~b;
     int tmp;
-    // bと1の足し算
-    int c = 1;
-    do {
-        tmp = b^c;
-        c = (b&c) << 1;
+    while(b != 0) {
+        tmp = (~a & b) << 1;
+        a = a^b;
         b = tmp;
-    } while (c!=0);
-    // aとbの足し算
-    do {
-        tmp = a^b;
-        b = (a&b) << 1;
-        a = tmp;
-    } while (b!=0);
+    }
     return a;
 }
 
 int main() {
-    int a = 20;
-    int b = 9;
+    int a = 35;
+    int b = 19;
     printf("%d - %d = %d\n", a,b,sub_no_arithm(a,b));
+    printf("%d - %d = %d\n", a,b,sub_no_arithm2(a,b));
     return 0;
 }

@@ -29,8 +29,8 @@ int add_no_arithm2(int a, int b) {
 }
 
 int main() {
-    int a = 20;
-    int b = 9;
+    int a = 35;
+    int b = 19;
     printf("%d + %d = %d\n", a,b,add_no_arithm2(a,b));
     return 0;
 }

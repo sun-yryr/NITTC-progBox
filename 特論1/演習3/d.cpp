@@ -53,7 +53,7 @@ int div_no_arithm(int a, int b) {
     int count = 0;
     while(a >= b) {
         a = sub_no_arithm(a, b);
-        count++;
+        count = add_no_arithm2(count, 1);
     }
     return count;
 }
@@ -67,8 +67,8 @@ int mod_no_arithm(int a, int b) {
 }
 
 int main() {
-    int a = 20;
-    int b = 9;
+    int a = 35;
+    int b = 19;
     printf("%d / %d = %d\n", a,b,div_no_arithm(a,b));
     printf("%d %% %d = %d\n", a,b,mod_no_arithm(a,b));
     return 0;
