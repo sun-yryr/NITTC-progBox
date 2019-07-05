@@ -35,24 +35,21 @@ int sub_no_arithm(int a, int b) {
     return add_no_arithm2(a, b);
 }
 
-// 掛け算
-int mlp_no_arithm(int a, int b) {
-    int ans = 0;
+// add_no_arithmを使わない方
+int sub_no_arithm2(int a, int b) {
+    int tmp;
     while(b != 0) {
-        if(b & 0x1) {
-            ans = add_no_arithm2(ans, a);
-        }
-        b >>= 1;
-        a <<= 1;
+        tmp = (~a & b) << 1;
+        a = a^b;
+        b = tmp;
     }
-    return ans;
+    return a;
 }
 
 int main() {
-    int a = 20;
-    int b = 9;
-    printf("%d + %d = %d\n", a,b,add_no_arithm2(a,b));
+    int a = 35;
+    int b = 19;
     printf("%d - %d = %d\n", a,b,sub_no_arithm(a,b));
-    printf("%d * %d = %d\n", a,b,mlp_no_arithm(a,b));
+    printf("%d - %d = %d\n", a,b,sub_no_arithm2(a,b));
     return 0;
 }

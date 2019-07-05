@@ -28,13 +28,6 @@ int add_no_arithm2(int a, int b) {
     return a;
 }
 
-// 引き算
-int sub_no_arithm(int a, int b) {
-    b = ~b;
-    b = add_no_arithm2(b, 1);
-    return add_no_arithm2(a, b);
-}
-
 // 掛け算
 int mlp_no_arithm(int a, int b) {
     int ans = 0;
@@ -49,10 +42,8 @@ int mlp_no_arithm(int a, int b) {
 }
 
 int main() {
-    int a = 20;
-    int b = 9;
-    printf("%d + %d = %d\n", a,b,add_no_arithm2(a,b));
-    printf("%d - %d = %d\n", a,b,sub_no_arithm(a,b));
+    int a = 35;
+    int b = 19;
     printf("%d * %d = %d\n", a,b,mlp_no_arithm(a,b));
     return 0;
 }
