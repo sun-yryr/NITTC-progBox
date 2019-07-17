@@ -18,7 +18,8 @@ int add_no_arithm(int a, int b) {
     return add_no_arithm(sum, carry);
 }
 
-int add_no_arithm2(int a, int b) {
+template<typename T>
+T add_no_arithm2(T a, T b) {
     int tmp;
     do {
         tmp = a^b;
@@ -29,8 +30,8 @@ int add_no_arithm2(int a, int b) {
 }
 
 int main() {
-    int a = 35;
-    int b = 19;
-    printf("%d + %d = %d\n", a,b,add_no_arithm2(a,b));
+    double a = 35.5;
+    double b = 19;
+    printf("%f + %f = %d\n", a,b,add_no_arithm2(a,b));
     return 0;
 }
