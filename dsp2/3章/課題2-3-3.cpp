@@ -55,18 +55,12 @@ double matrix_norme(vector<double> a, vector<double> b) {
     return sqrt(tmp);
 }
 
-int main(int argc, char const *argv[]) {
-    vector<vector<double> > original{
-        {2,1,3},
-        {1,2,3},
-        {3,3,20}
-    };
-    vector<double> v{1,0,0};
+double a(vector<vector<double> > original, vector<double>& v) {
     const int ROW = original.size();
     const int COLUMN = original.front().size();
     vector<double> v_hat{0,0,0};
     vector<double> v_old{0,0,0};
-    double lambda;
+    double lambda = 0;
     double error = 10000;
     do{
         matrix_product(original, v, v_hat);
@@ -81,5 +75,24 @@ int main(int argc, char const *argv[]) {
     OUT("固有ベクトル");
     REP(i, 3) printf("%f ", v[i]);
     printf("\n");
+    return lambda;
+}
+
+int main(int argc, char const *argv[]) {
+    vector<vector<double> > original{
+        {2,1,3},
+        {1,2,3},
+        {3,3,20}
+    };
+    double la, tmp;
+    vector<double> v{1,0,0};
+    for(int i=0; i<3; i++) {
+        la = a(original, v);
+        for(int k=0; k<3; k++) {
+            for(int p=0; p<3; p++) {
+                original[k][p] -= la * v[k] * v[p];
+            }
+        }
+    }
     return 0;
 }
