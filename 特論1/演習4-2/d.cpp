@@ -10,16 +10,33 @@ using namespace std;
 
 ll MOD = 10e9 + 7;
 
-int number = 4;
-int recursive(int n) {
+char number = '4';
+int adder(int n) {
+    int counter = 0;
+    auto f = [&] (string s) -> bool {
+        return (count(s.begin(), s.end(), number) > 0);
+    };
+    for(int i=1; i<=n; i++) {
+        if (f(to_string(i))) counter += i;
+    }
+    return counter;
+}
+
+int multi(int n) {
+    int counter = 1;
+    auto f = [&] (string s) -> bool {
+        return (count(s.begin(), s.end(), number) > 0);
+    };
+    for(int i=1; i<=n; i++) {
+        if (f(to_string(i))) counter *= i;
+    }
+    return counter;
 }
 
 int main() {
     int n;
-    cout << "数える数字 : ";
-    cin >> number;
     cout << "n = ";
     cin >> n;
-    cout << recursive(n) << endl;
+    cout << adder(n) << endl;
     return 0;
 }
