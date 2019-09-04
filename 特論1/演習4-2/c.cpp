@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <istream>
 using namespace std;
 
 #define REP(i, n) for(int (i)=0; (i)<(n); (i)++)
@@ -10,12 +11,18 @@ using namespace std;
 
 ll MOD = 10e9 + 7;
 
-int a(int n) {
+int a(vector<int> n) {
     int count = 0;
-    for(int i=1; i<=n; i++) {
-        count += (int)(log10(i))+1;
+    int size = n.size();
+    for(int i=0; i<size; i++) {
+        if (n[i] == 0) count += 1;
+        else count += (int)(log10(n[i]))+1;
     }
-    return count+1;
+    return count;
+}
+int a(int n) {
+    if (n == 0) return 1;
+    return (int)(log10(n))+1;
 }
 
 int main() {
